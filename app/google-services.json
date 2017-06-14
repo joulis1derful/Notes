@@ -1,0 +1,58 @@
+{
+  "project_info": {
+    "project_number": "312096804383",
+    "firebase_url": "https://notifications-a9328.firebaseio.com",
+    "project_id": "notifications-a9328",
+    "storage_bucket": "notifications-a9328.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:312096804383:android:61c77184fce3778b",
+        "android_client_info": {
+          "package_name": "com.gorovoii.vitalii.fbdb"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "312096804383-80uqbggk86mgo5pjq6idh0gipp7u057g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gorovoii.vitalii.fbdb",
+            "certificate_hash": "8653a1c2dea749476161ac6b2b34b21b1e5eec39"
+          }
+        },
+        {
+          "client_id": "312096804383-h97d1vlmo4a8b6ekriftgdoj81fn16fg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBs-TxQ5olxGkPT0J35fn-00ObhDw422Vg"
+        },
+        {
+          "current_key": "AIzaSyCVdNSJ_Gt1CYE3eOHQcC8O3iOSopttumQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "312096804383-h97d1vlmo4a8b6ekriftgdoj81fn16fg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
