@@ -20,7 +20,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.joulis1derful.project.fbdb.R;
 import com.joulis1derful.project.fbdb.model.Note;
-import com.joulis1derful.project.fbdb.service.DevToDevIntent;
+import com.joulis1derful.project.fbdb.service.MessageSenderService;
 
 import static com.joulis1derful.project.fbdb.activity.MainActivity.NOTES;
 
@@ -115,7 +115,7 @@ public class AddNoteActivity extends AppCompatActivity {
 
                 if (databaseError == null) {
                     Toast.makeText(AddNoteActivity.this, "Successfully posted", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(Intent.ACTION_SYNC, null, AddNoteActivity.this, DevToDevIntent.class);
+                    Intent intent = new Intent(Intent.ACTION_SYNC, null, AddNoteActivity.this, MessageSenderService.class);
                     startService(intent);
                     startActivity(new Intent(AddNoteActivity.this, MainActivity.class));
                 } else {
