@@ -6,7 +6,7 @@ import android.util.Log;
 
 import com.google.firebase.messaging.RemoteMessage;
 
-public class FMS extends com.google.firebase.messaging.FirebaseMessagingService {
+public class FirebaseMessageService extends com.google.firebase.messaging.FirebaseMessagingService {
 
     private static final String TAG = "MyFirebaseMsgService";
 
@@ -14,7 +14,7 @@ public class FMS extends com.google.firebase.messaging.FirebaseMessagingService 
 
     @Override
     public void onCreate() {
-        Log.e("FMS", "onCreate");
+        Log.e("FirebaseMessageService", "onCreate");
         broadcaster = LocalBroadcastManager.getInstance(this);
     }
 
@@ -29,11 +29,14 @@ public class FMS extends com.google.firebase.messaging.FirebaseMessagingService 
         Intent intent = new Intent("MyData");
         intent.putExtra("title", title);
         intent.putExtra("body", body);
+
+        //uncomment to fetch separate data like key or value of a note
      /*   for (Map.Entry<String, String> entry : remoteMessage.getData().entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
             Log.d(TAG, "key, " + key + " value " + value);
         }*/
+
         broadcaster.sendBroadcast(intent);
     }
 }

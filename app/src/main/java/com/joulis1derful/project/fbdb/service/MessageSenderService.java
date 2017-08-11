@@ -17,7 +17,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class DevToDevIntent extends IntentService {
+public class MessageSenderService extends IntentService {
 
     private static final String TOKEN =
             "cxApZkjjpB0:APA91bEYmbuqowY0Xrh0XSutcQfDL97a6v_mmnmLDE6LVegEi-7Us6qgrD8CW8qTYNtPrZXxaByYvO20Y1fIV4aMO8hVYtoPBB2-i5mSddKWuqDBnC9Xg_PvIderjrJWqxauxz0zNMO-";
@@ -28,7 +28,7 @@ public class DevToDevIntent extends IntentService {
     public static final MediaType JSON
             = MediaType.parse("application/json; charset=utf-8");
 
-    public DevToDevIntent() {
+    public MessageSenderService() {
         super("serviceMessage");
     }
 
