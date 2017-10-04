@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.joulis1derful.project.fbdb">
+    package="com.joulis1derful.project.todo">
     <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:allowBackup="true"
@@ -10,18 +10,21 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.joulis1derful.project.fbdb.activity.AddNoteActivity"
+            android:name="com.joulis1derful.project.todo.activity.AddNoteActivity"
             android:label="@string/title_activity_add_note"
-            android:parentActivityName="com.joulis1derful.project.fbdb.activity.MainActivity"
+            android:parentActivityName="com.joulis1derful.project.todo.activity.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.joulis1derful.project.fbdb.activity.MainActivity" />
+                android:value="com.joulis1derful.project.todo.activity.MainActivity" />
         </activity>
         <activity
-            android:name="com.joulis1derful.project.fbdb.activity.LoginActivity"
+            android:name=".activity.MainActivity">
+        </activity>
+        <activity
+            android:name="com.joulis1derful.project.todo.activity.LoginActivity"
             android:label="@string/title_activity_login"
-            android:parentActivityName="com.joulis1derful.project.fbdb.activity.MainActivity">
+            android:parentActivityName="com.joulis1derful.project.todo.activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -29,21 +32,21 @@
             </intent-filter>
         </activity>
 
-        <service android:name="com.joulis1derful.project.fbdb.service.FirebaseInstanceIDService">
+        <service android:name="com.joulis1derful.project.todo.service.FirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
 
         <service
-            android:name="com.joulis1derful.project.fbdb.service.FirebaseMessageService">
+            android:name="com.joulis1derful.project.todo.service.FirebaseMessageService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
 
         <service
-            android:name="com.joulis1derful.project.fbdb.service.MessageSenderService"
+            android:name="com.joulis1derful.project.todo.service.MessageSenderService"
             android:exported="false" />
 
     </application>
