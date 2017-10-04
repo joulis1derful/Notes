@@ -11,7 +11,7 @@
         app:showAsAction="always" />
     <item
         android:id="@+id/actionSignOut"
-        android:icon="@android:drawable/ic_lock_power_off"
+        android:icon="@drawable/ic_exit_to_app_white_24dp"
         android:orderInCategory="2"
         android:title="SIGN OUT"
         android:visible="true"
