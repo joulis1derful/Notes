@@ -1,4 +1,4 @@
-package com.joulis1derful.project.fbdb.activity;
+package com.joulis1derful.project.todo.activity;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -9,6 +9,8 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,15 +23,15 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.joulis1derful.project.fbdb.R;
-import com.joulis1derful.project.fbdb.adapter.NoteAdapter;
-import com.joulis1derful.project.fbdb.model.Note;
+import com.joulis1derful.project.todo.R;
+import com.joulis1derful.project.todo.adapter.NoteAdapter;
+import com.joulis1derful.project.todo.model.Note;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = "User info";
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     public static final String NOTES = "Notes";
 
@@ -52,6 +54,31 @@ public class MainActivity extends AppCompatActivity {
 
         updateUI();
         displayNotes();
+
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                int id = viewHolder.itemView.getId() + 1;
+                String keyToRemove = mDataList.get(id).getFirebaseKey();
+
+                mDatabase.child(NOTES).child(keyToRemove).removeValue(new DatabaseReference.CompletionListener() {
+                    @Override
+                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                        if(databaseError != null) {
+                            Log.e(TAG, "Some error has occured while deleting the note");
+                        } else {
+                            Toast.makeText(MainActivity.this, "Note was deleted successfully",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        }).attachToRecyclerView(mRecyclerView);
     }
 
     private void updateUI() {
@@ -64,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(mNoteAdapter);
+
         mNoteAdapter.notifyDataSetChanged();
     }
 
