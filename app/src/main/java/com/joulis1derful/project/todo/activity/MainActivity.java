@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,6 +20,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -43,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
 
     private ArrayList<Note> mDataList;
+    private View rootView;
+    private boolean doubleBackToExitPressedOnce = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +57,21 @@ public class MainActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
 
+        isAuthorized();
+
         updateUI();
         displayNotes();
+    }
 
+    private void isAuthorized() {
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user == null) {
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+        }
+    }
+
+    private void swipeToDelete() {
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
@@ -62,18 +79,34 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+            public void onSwiped(final RecyclerView.ViewHolder viewHolder, int swipeDir) {
                 int id = viewHolder.itemView.getId() + 1;
-                String keyToRemove = mDataList.get(id).getFirebaseKey();
+                final Note note = mDataList.get(id);
+                final String keyToRemove = note.getFirebaseKey();
 
                 mDatabase.child(NOTES).child(keyToRemove).removeValue(new DatabaseReference.CompletionListener() {
                     @Override
                     public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                        if(databaseError != null) {
+                        if (databaseError != null) {
                             Log.e(TAG, "Some error has occured while deleting the note");
                         } else {
-                            Toast.makeText(MainActivity.this, "Note was deleted successfully",
-                                    Toast.LENGTH_SHORT).show();
+                            Snackbar snackbar = Snackbar
+                                    .make(rootView, "Record is deleted", Snackbar.LENGTH_LONG)
+                                    .setAction("UNDO", new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                          mDatabase.child(NOTES).child(keyToRemove)
+                                                  .setValue(note, new DatabaseReference.CompletionListener() {
+                                                      @Override
+                                                      public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                                                          Snackbar snackbar1 = Snackbar
+                                                                  .make(rootView, "Record is restored", Snackbar.LENGTH_LONG);
+                                                          snackbar1.show();
+                                                      }
+                                                  });
+                                        }
+                                    });
+                            snackbar.show();
                         }
                     }
                 });
@@ -82,15 +115,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateUI() {
+        rootView = getWindow().getDecorView().getRootView();
 
         mDataList = new ArrayList<>();
 
-        mRecyclerView = (RecyclerView)findViewById(R.id.recycler);
+        mRecyclerView = (RecyclerView) findViewById(R.id.recycler);
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mNoteAdapter = new NoteAdapter(this, mDataList);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(mNoteAdapter);
+        swipeToDelete();
 
         mNoteAdapter.notifyDataSetChanged();
     }
@@ -104,13 +139,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        if(item.getItemId() == R.id.actionAdd) {
+        if (item.getItemId() == R.id.actionAdd) {
             Intent intent = new Intent(this, AddNoteActivity.class);
             startActivity(intent);
         }
 
-        if(item.getItemId() == R.id.actionSignOut){
+        if (item.getItemId() == R.id.actionSignOut) {
             LoginActivity.signout();
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
@@ -144,6 +178,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce = false;
+            }
+        }, 2000);
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
         LocalBroadcastManager.getInstance(this).registerReceiver((mMessageReceiver),
@@ -162,12 +215,12 @@ public class MainActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             String title = intent.getExtras().getString("title");
             String body = intent.getExtras().getString("body");
-            Toast.makeText(MainActivity.this, body+"\n"+title, Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, body + "\n" + title, Toast.LENGTH_LONG).show();
         }
     };
 
     private void showProgressBar(boolean isProgrssBarVisible) {
-        if(isProgrssBarVisible) {
+        if (isProgrssBarVisible) {
             mRecyclerView.setVisibility(View.GONE);
             mProgressBar.setVisibility(View.VISIBLE);
         } else {
