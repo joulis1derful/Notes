@@ -1,4 +1,4 @@
-package com.joulis1derful.project.fbdb.activity;
+package com.joulis1derful.project.todo.activity;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -15,14 +16,17 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.joulis1derful.project.fbdb.R;
-import com.joulis1derful.project.fbdb.model.Note;
-import com.joulis1derful.project.fbdb.service.MessageSenderService;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
+import com.joulis1derful.project.todo.R;
+import com.joulis1derful.project.todo.model.Note;
+import com.joulis1derful.project.todo.service.MessageSenderService;
 
-import static com.joulis1derful.project.fbdb.activity.MainActivity.NOTES;
+import static com.joulis1derful.project.todo.activity.MainActivity.NOTES;
 
 public class AddNoteActivity extends AppCompatActivity {
 
@@ -33,15 +37,14 @@ public class AddNoteActivity extends AppCompatActivity {
     Button saveBtn;
 
     private BroadcastReceiver mMessageReceiver;
-
-    private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_note);
 
-        mAuth = FirebaseAuth.getInstance();
+        FirebaseAuth.getInstance();
 
         mMessageReceiver = new BroadcastReceiver() {
             @Override
@@ -100,14 +103,12 @@ public class AddNoteActivity extends AppCompatActivity {
     }
 
     private void postNote(String title, String body) {
-
-        DatabaseReference mDbRef = FirebaseDatabase.getInstance().getReference();
-
-        String key = mDbRef.child(NOTES).push().getKey();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        String key = mDatabase.child(NOTES).push().getKey();
 
         Note noteToSave = new Note(key, title, body);
-
-        mDbRef.child(NOTES).child(key).setValue(noteToSave, new DatabaseReference.CompletionListener() {
+        mDatabase.child(NOTES).child(key)
+                .setValue(noteToSave, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
 

@@ -1,4 +1,4 @@
-package com.joulis1derful.project.fbdb.service;
+package com.joulis1derful.project.todo.service;
 
 import android.util.Log;
 
@@ -7,7 +7,7 @@ import com.google.firebase.iid.FirebaseInstanceIdService;
 
 public class FirebaseInstanceIDService extends FirebaseInstanceIdService {
 
-    private static final String TAG = "MyFirebaseIIDService";
+    private static final String TAG = FirebaseInstanceIDService.class.getSimpleName();
 
     @Override
     public void onTokenRefresh() {

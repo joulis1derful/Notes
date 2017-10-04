@@ -1,4 +1,4 @@
-package com.joulis1derful.project.fbdb.activity;
+package com.joulis1derful.project.todo.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,13 +14,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.joulis1derful.project.fbdb.R;
+import com.joulis1derful.project.todo.R;
 
-public class LoginActivity extends AppCompatActivity
-        implements View.OnClickListener
-{
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
 
     private EditText email;
     private EditText password;

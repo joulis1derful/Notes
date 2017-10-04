@@ -1,4 +1,4 @@
-package com.joulis1derful.project.fbdb.service;
+package com.joulis1derful.project.todo.service;
 
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
@@ -8,13 +8,13 @@ import com.google.firebase.messaging.RemoteMessage;
 
 public class FirebaseMessageService extends com.google.firebase.messaging.FirebaseMessagingService {
 
-    private static final String TAG = "MyFirebaseMsgService";
+    private static final String TAG = FirebaseMessageService.class.getSimpleName();
 
     private LocalBroadcastManager broadcaster;
 
     @Override
     public void onCreate() {
-        Log.e("FirebaseMessageService", "onCreate");
+        Log.e(TAG, "onCreate");
         broadcaster = LocalBroadcastManager.getInstance(this);
     }
 

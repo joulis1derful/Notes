@@ -1,4 +1,4 @@
-package com.joulis1derful.project.fbdb.model;
+package com.joulis1derful.project.todo.model;
 
 public class Note {
 

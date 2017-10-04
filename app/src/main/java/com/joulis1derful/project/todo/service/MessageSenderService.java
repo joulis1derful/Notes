@@ -1,4 +1,4 @@
-package com.joulis1derful.project.fbdb.service;
+package com.joulis1derful.project.todo.service;
 
 import android.app.IntentService;
 import android.content.Intent;
@@ -66,7 +66,7 @@ public class MessageSenderService extends IntentService {
                 }
             });
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             Log.d("Exception", e + "");
             e.printStackTrace();
         }
