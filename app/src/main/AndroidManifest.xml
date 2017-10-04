@@ -20,16 +20,16 @@
         </activity>
         <activity
             android:name=".activity.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name="com.joulis1derful.project.todo.activity.LoginActivity"
             android:label="@string/title_activity_login"
             android:parentActivityName="com.joulis1derful.project.todo.activity.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <service android:name="com.joulis1derful.project.todo.service.FirebaseInstanceIDService">
