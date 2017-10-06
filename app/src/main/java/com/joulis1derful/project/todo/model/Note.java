@@ -5,6 +5,7 @@ public class Note {
     private String firebaseKey;
     private String title;
     private String body;
+    private int priority;
 
     public Note() {
     }
@@ -13,30 +14,22 @@ public class Note {
         return firebaseKey;
     }
 
-    public void setFirebaseKey(String firebaseKey) {
-        this.firebaseKey = firebaseKey;
-    }
-
     public String getTitle() {
         return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getBody() {
         return body;
     }
 
-    public void setBody(String body) {
-        this.body = body;
+    public int getPriority() {
+        return priority;
     }
 
-    public Note(String firebaseKey, String title, String body) {
-
+    public Note(String firebaseKey, String title, String body, int priority) {
         this.firebaseKey = firebaseKey;
         this.title = title;
         this.body = body;
+        this.priority = priority;
     }
 }
