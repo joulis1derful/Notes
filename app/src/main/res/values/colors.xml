@@ -2,7 +2,12 @@
 <resources>
     <color name="colorPrimary">#46b69e</color>
     <color name="colorPrimaryDark">#26784c</color>
+    <color name="colorPrimaryLight">#C5CAE9</color>
     <color name="colorAccent">#FF4081</color>
     <color name="blue_800">#1565C0</color>
     <color name="grey_50">#FAFAFA</color>
+    <color name="materialRed">#E74C3C</color>
+    <color name="materialOrange">#E67E22</color>
+    <color name="materialYellow">#F1C40F</color>
+
 </resources>

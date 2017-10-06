@@ -4,8 +4,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
@@ -47,7 +49,8 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayList<Note> mDataList;
     private View rootView;
-    private boolean doubleBackToExitPressedOnce = false;
+
+    private int doubleBackToExitPressed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +59,6 @@ public class MainActivity extends AppCompatActivity {
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
-
-        isAuthorized();
 
         updateUI();
         displayNotes();
@@ -115,8 +116,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateUI() {
+        isAuthorized();
+
         rootView = getWindow().getDecorView().getRootView();
 
+        doubleBackToExitPressed = 1;
         mDataList = new ArrayList<>();
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler);
@@ -177,21 +181,22 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onBackPressed() {
-        if (doubleBackToExitPressedOnce) {
-            super.onBackPressed();
-            return;
+        if (doubleBackToExitPressed == 2) {
+            finishAffinity();
+            System.exit(0);
+        }
+        else {
+            doubleBackToExitPressed++;
+            Toast.makeText(this, "Please press Back again to exit", Toast.LENGTH_SHORT).show();
         }
 
-        this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
-
         new Handler().postDelayed(new Runnable() {
-
             @Override
             public void run() {
-                doubleBackToExitPressedOnce = false;
+                doubleBackToExitPressed=1;
             }
         }, 2000);
     }

@@ -3,4 +3,12 @@
     <string name="title_activity_add_note">AddNoteActivity</string>
     <string name="title_activity_login">Notes on cloud</string>
     <string name="title_activity_select_user">SelectUserActivity</string>
+
+    <string name="priority_string">Priority</string>
+    <string name="priority_1">1</string>
+    <string name="priority_2">2</string>
+    <string name="priority_3">3</string>
+    <string name="high_priority">High</string>
+    <string name="med_priority">Medium</string>
+    <string name="low_priority">Low</string>
 </resources>

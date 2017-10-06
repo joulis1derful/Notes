@@ -8,20 +8,17 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.MutableData;
-import com.google.firebase.database.Transaction;
 import com.joulis1derful.project.todo.R;
 import com.joulis1derful.project.todo.model.Note;
 import com.joulis1derful.project.todo.service.MessageSenderService;
@@ -31,6 +28,7 @@ import static com.joulis1derful.project.todo.activity.MainActivity.NOTES;
 public class AddNoteActivity extends AppCompatActivity {
 
     public static final String REQUIRED = "Required";
+    private int mPriority;
 
     EditText addTtl;
     EditText addBody;
@@ -76,6 +74,8 @@ public class AddNoteActivity extends AppCompatActivity {
         addTtl = (EditText)findViewById(R.id.addTitle);
         addBody = (EditText)findViewById(R.id.addBody);
         saveBtn = (Button)findViewById(R.id.btnSave);
+        ((RadioButton) findViewById(R.id.radButton1)).setChecked(true);
+        mPriority = 1;
 
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,17 +96,17 @@ public class AddNoteActivity extends AppCompatActivity {
                 setEditingEnabled(false);
                 saveBtn.setEnabled(false);
 
-                postNote(addTtl.getText().toString(), addBody.getText().toString());
+                postNote(addTtl.getText().toString(), addBody.getText().toString(), mPriority);
                 Toast.makeText(AddNoteActivity.this,"Posting...", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void postNote(String title, String body) {
+    private void postNote(String title, String body, int priority) {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         String key = mDatabase.child(NOTES).push().getKey();
 
-        Note noteToSave = new Note(key, title, body);
+        Note noteToSave = new Note(key, title, body, priority);
         mDatabase.child(NOTES).child(key)
                 .setValue(noteToSave, new DatabaseReference.CompletionListener() {
             @Override
@@ -124,6 +124,16 @@ public class AddNoteActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public void onPrioritySelected(View view) {
+        if (((RadioButton) findViewById(R.id.radButton1)).isChecked()) {
+            mPriority = 1;
+        } else if (((RadioButton) findViewById(R.id.radButton2)).isChecked()) {
+            mPriority = 2;
+        } else if (((RadioButton) findViewById(R.id.radButton3)).isChecked()) {
+            mPriority = 3;
+        }
     }
 
    private void setEditingEnabled(boolean state) {
