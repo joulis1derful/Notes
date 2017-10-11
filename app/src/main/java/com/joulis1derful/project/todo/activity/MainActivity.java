@@ -29,6 +29,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.joulis1derful.project.todo.R;
+import com.joulis1derful.project.todo.adapter.ItemClickAdapter;
 import com.joulis1derful.project.todo.adapter.NoteAdapter;
 import com.joulis1derful.project.todo.model.Note;
 
@@ -80,8 +81,8 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onSwiped(final RecyclerView.ViewHolder viewHolder, int swipeDir) {
-                int id = viewHolder.itemView.getId() + 1;
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                int id = viewHolder.getAdapterPosition();
                 final Note note = mDataList.get(id);
                 final String keyToRemove = note.getFirebaseKey();
 
@@ -130,6 +131,13 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(mNoteAdapter);
         swipeToDelete();
+        mRecyclerView.addOnItemTouchListener(new ItemClickAdapter(this, new ItemClickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
+                startActivity(intent);
+            }
+        }));
 
         mNoteAdapter.notifyDataSetChanged();
     }
