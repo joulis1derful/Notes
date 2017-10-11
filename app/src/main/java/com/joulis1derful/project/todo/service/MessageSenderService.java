@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -27,6 +30,7 @@ public class MessageSenderService extends IntentService {
 
     public static final MediaType JSON
             = MediaType.parse("application/json; charset=utf-8");
+    private static final String TAG = MessageSenderService.class.getSimpleName();
 
     public MessageSenderService() {
         super("serviceMessage");
@@ -37,13 +41,15 @@ public class MessageSenderService extends IntentService {
         //send message
         Log.e("IntentService", "handling");
         try {
+            String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            Log.e(TAG, uid);
             OkHttpClient client = new OkHttpClient();
             JSONObject json=new JSONObject();
             JSONObject dataJson=new JSONObject();
             dataJson.put("body","Someone has created a note");
             dataJson.put("title","UPDATE");
             json.put("notification", dataJson);
-            json.put("to",TOKEN);
+            json.put("to",uid);
             RequestBody body = RequestBody.create(JSON, json.toString());
             Request request = new Request.Builder()
                     .header("Authorization","key="+ LEGACY_SERVER_KEY)

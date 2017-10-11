@@ -34,12 +34,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         findViewById(R.id.btn_registration).setOnClickListener(this);
         findViewById(R.id.btn_sign_in).setOnClickListener(this);
-
-        FirebaseUser user = mAuth.getCurrentUser();
-        if (user != null) {
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
-        }
     }
 
     @Override
